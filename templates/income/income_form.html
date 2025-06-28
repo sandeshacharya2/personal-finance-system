@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% if form.instance.pk %}Edit Income{% else %}Add Income{% endif %}</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #e3f2fd);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 123, 255, 0.2);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .form-container h1 {
+      text-align: center;
+      color: #2575fc;
+      margin-bottom: 30px;
+    }
+
+    form p {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+    }
+
+    button {
+      background-color: #2575fc;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1657bf;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #2575fc;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+      .form-container {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h1>{% if form.instance.pk %}Edit Income{% else %}Add Income{% endif %}</h1>
+
+    <form method="post" onsubmit="return confirmSave()">
+      {% csrf_token %}
+      
+      <p>
+        <label for="id_predefined_source">Source</label>
+        <select id="id_predefined_source" name="predefined_source" onchange="toggleOtherSource()">
+          <option value="">-- Select Source --</option>
+          <option value="Salary" {% if form.initial.predefined_source == "Salary" %}selected{% endif %}>Salary</option>
+          <option value="Freelancing" {% if form.initial.predefined_source == "Freelancing" %}selected{% endif %}>Freelancing</option>
+          <option value="Business" {% if form.initial.predefined_source == "Business" %}selected{% endif %}>Business</option>
+          <option value="Other" {% if form.initial.predefined_source == "Other" %}selected{% endif %}>Other</option>
+        </select>
+      </p>
+
+      <p id="other_source_wrapper" style="display: none;">
+        <label for="id_custom_source">Other Source</label>
+        <input type="text" name="custom_source" id="id_custom_source" value="{{ form.initial.custom_source|default:'' }}">
+      </p>
+
+      <p>
+        <label for="id_amount">Amount</label>
+        <input type="number" name="amount" id="id_amount" step="0.01" required value="{{ form.initial.amount|default:'' }}">
+      </p>
+
+      <button type="submit">Save</button>
+    </form>
+
+    <a class="back-link" href="{% url 'income_list' %}">← Back to Income List</a>
+  </div>
+
+  <script>
+    function confirmSave() {
+      const select = document.getElementById('id_predefined_source');
+      const otherInput = document.getElementById('id_custom_source');
+
+      if (select.value !== 'Other') {
+        otherInput.value = select.value;  // Set selected value into custom_source input
+      }
+
+      return confirm("Are you sure you want to save this income?");
+    }
+
+    function toggleOtherSource() {
+      const select = document.getElementById('id_predefined_source');
+      const otherWrapper = document.getElementById('other_source_wrapper');
+      const otherInput = document.getElementById('id_custom_source');
+
+      if (select.value === 'Other') {
+        otherWrapper.style.display = 'block';
+        otherInput.value = ""; // Clear previous
+        otherInput.required = true;
+      } else {
+        otherWrapper.style.display = 'none';
+        otherInput.required = false;
+        otherInput.value = select.value; // auto-fill
+      }
+    }
+
+    window.onload = function () {
+      toggleOtherSource();
+    };
+  </script>
+
+</body>
+</html>

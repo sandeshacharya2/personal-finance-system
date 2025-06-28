@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .update-bill-container {
+    max-width: 480px;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .update-bill-container h2 {
+    color: #1976d2;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  form button {
+    display: block;
+    width: 100%;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  form button:hover {
+    background-color: #115293;
+  }
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem;
+    font-weight: 500;
+    color: #1976d2;
+    text-decoration: none;
+  }
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="update-bill-container">
+  <h2>Update Bill</h2>
+  <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Update</button>
+  </form>
+  <a href="{% url 'bill_list' %}" class="back-link">← Back to Bills</a>
+</div>
+{% endblock %}

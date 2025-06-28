@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  /* your bill detail styles here */
+</style>
+
+<div class="bill-container">
+  <h2>Bill Details</h2>
+  <div class="bill-info">
+    <p><strong>Title:</strong> {{ bill.title }}</p>
+    <p><strong>Amount:</strong> Rs. {{ bill.amount }}</p>
+    <p><strong>Added on:</strong> {{ bill.added_date }}</p>
+  </div>
+
+  {% if bill.file.url|lower|endswith:".jpg" or
+        bill.file.url|lower|endswith:".jpeg" or
+        bill.file.url|lower|endswith:".png" or
+        bill.file.url|lower|endswith:".gif" %}
+    <img src="{{ bill.file.url }}" alt="Bill Image" style="max-width:100%; height:auto; border: 1px solid #ccc;">
+  {% else %}
+    <a href="{{ bill.file.url }}" target="_blank">📄 View File</a>
+  {% endif %}
+
+  <a href="{% url 'bill_list' %}" class="back-link">← Back to Bills</a>
+</div>
+{% endblock %}

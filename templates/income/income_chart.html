@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Income Chart</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden; /* prevent horizontal scroll */
+    }
+    #chart-container {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 0;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto !important;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">Income Distribution</h2>
+  <div id="chart-container">
+    <canvas id="incomePieChart"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('incomePieChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ["Salary", "Business", "Freelancing", "Others"],
+        datasets: [{
+          data: [3000, 1500, 1200],
+          backgroundColor: ['#4CAF50', '#2196F3', '#FFC107','#fffff']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

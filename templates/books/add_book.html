@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        background-color: #f2f2f2;
+        font-family: Arial, sans-serif;
+    }
+
+    .form-container {
+        background: #fff;
+        max-width: 500px;
+        margin: 60px auto;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h2 {
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+    }
+
+    .form-container form input,
+    .form-container form select,
+    .form-container form textarea {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+    .form-container button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .form-container button:hover {
+        background-color: #0056b3;
+    }
+    .cancel-btn {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 8px 16px;
+    background-color: #ccc;
+    color: #fc0e0e;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  .cancel-btn:hover {
+    background-color: #999;
+    color: white;
+  }
+</style>
+
+<div class="form-container">
+    <h2>Add Book</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add</button>
+        <a href="{% url 'dashboard' %}" class="cancel-btn">Cancel</a>
+    </form>
+</div>
+{% endblock %}

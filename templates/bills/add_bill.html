@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9fafb;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form p {
+    margin-bottom: 15px;
+  }
+
+  input[type="text"], input[type="number"], input[type="file"], select, textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #3f51b5;
+  }
+
+  button {
+    background-color: #3f51b5;
+    color: white;
+    padding: 12px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+  }
+
+  button:hover {
+    background-color: #2c387e;
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #3f51b5;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="container">
+  <h2>Add Bill</h2>
+  <form method="post" enctype="multipart/form-data" id="billForm">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Add Bill</button>
+  </form>
+  <a href="{% url 'bill_list' %}" class="back-link">← Back to Bills</a>
+</div>
+
+<script>
+  // Example: simple client-side validation to prevent empty fields (optional)
+  document.getElementById('billForm').addEventListener('submit', function(e) {
+    const inputs = this.querySelectorAll('input[type="text"], input[type="number"], textarea, select');
+    let valid = true;
+    inputs.forEach(input => {
+      if (!input.value.trim()) {
+        valid = false;
+        input.style.borderColor = 'red';
+      } else {
+        input.style.borderColor = '#ddd';
+      }
+    });
+    if (!valid) {
+      e.preventDefault();
+      alert('Please fill out all required fields.');
+    }
+  });
+</script>
+{% endblock %}

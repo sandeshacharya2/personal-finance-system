@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 40px auto;
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .error-message {
+      color: #d93025;
+      font-size: 0.875rem;
+      margin-bottom: 12px;
+      display: none;
+    }
+    button {
+      background-color: #2575fc;
+      color: white;
+      padding: 10px 15px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: not-allowed;
+      opacity: 0.5;
+      width: 100%;
+    }
+    button.enabled {
+      cursor: pointer;
+      opacity: 1;
+    }
+    ul.messages {
+      list-style-type: none;
+      padding-left: 0;
+      margin-bottom: 15px;
+    }
+    ul.messages li {
+      background: #e0f7fa;
+      border: 1px solid #81d4fa;
+      padding: 10px;
+      border-radius: 5px;
+      color: #0277bd;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Your Profile</h1>
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <form id="profileForm" method="post" novalidate>
+    {% csrf_token %}
+
+    <p>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" value="{{ user.username }}" required minlength="3" />
+      <span class="error-message" id="usernameError">Username must be at least 3 characters.</span>
+    </p>
+
+    <p>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="{{ user.email }}" required />
+      <span class="error-message" id="emailError">Please enter a valid email address.</span>
+    </p>
+
+    <button type="submit" id="submitBtn" disabled>Update Profile</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('profileForm');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const submitBtn = document.getElementById('submitBtn');
+
+    const usernameError = document.getElementById('usernameError');
+    const emailError = document.getElementById('emailError');
+
+    function validateUsername() {
+      if (usernameInput.value.trim().length >= 3) {
+        usernameError.style.display = 'none';
+        return true;
+      } else {
+        usernameError.style.display = 'block';
+        return false;
+      }
+    }
+
+    function validateEmail() {
+      const email = emailInput.value.trim();
+      // Basic email regex pattern
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailPattern.test(email)) {
+        emailError.style.display = 'none';
+        return true;
+      } else {
+        emailError.style.display = 'block';
+        return false;
+      }
+    }
+
+    function validateForm() {
+      const isUsernameValid = validateUsername();
+      const isEmailValid = validateEmail();
+
+      if (isUsernameValid && isEmailValid) {
+        submitBtn.disabled = false;
+        submitBtn.classList.add('enabled');
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.remove('enabled');
+      }
+    }
+
+    usernameInput.addEventListener('input', validateForm);
+    emailInput.addEventListener('input', validateForm);
+
+    // Validate on page load (in case of pre-filled data)
+    window.addEventListener('DOMContentLoaded', validateForm);
+  </script>
+
+</body>
+</html>
